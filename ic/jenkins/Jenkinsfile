@@ -24,6 +24,7 @@ pipeline {
         }
         stage('Préparation du déploiement') {
             steps {
+                sh 'chmod +x ./ic/docker/pre-deploy.sh'
                 sh './ic/docker/pre-deploy.sh'
             }
         }
@@ -35,6 +36,7 @@ pipeline {
         }
         stage('Finalisation du déploiement') {
             steps {
+                sh 'chmod +x ./ic/docker/post-deploy.sh'
                 sh './ic/docker/post-deploy.sh'
             }
         }
