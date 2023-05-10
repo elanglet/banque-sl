@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Déploiement dans Docker') {
             steps {
-                sh 'docker compose -f ./ic/dockep/docker-compse.yml up -d --build'
+                sh 'docker compose -f ./ic/docker/docker-compose.yml up -d --build'
             }
         }
         stage('Finalisation du déploiement') {
