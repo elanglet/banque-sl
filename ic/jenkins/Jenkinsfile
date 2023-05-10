@@ -4,22 +4,38 @@ pipeline {
     stages {
         stage('Récupération du code') {
             steps {
-                git url: 'https://github.com/elanglet/banque-symfony', branch: 'main'
+                git url: 'https://github.com/elanglet/banque-sl', branch: 'dev'
             }
         }
         stage('Construction du projet') {
             steps {
-                sh 'composer install'
+                sh 'composer update'
             }
         }
         stage('Exécution des tests') {
             steps {
-                sh './vendor/bin/phpunit --log-junit var/log/phpunit.xml'
+                sh './vendor/bin/phpunit --log-junit var/log/phpunit.xml tests/Unit'
             }
         }
         stage('Publication des tests') {
             steps {
                 junit 'var/log/phpunit.xml'
+            }
+        }
+        stage('Préparation du déploiement') {
+            steps {
+                sh './ic/docker/pre-deploy.sh'
+            }
+        }
+        stage('Déploiement dans Docker') {
+            steps {
+                sh 'cd ./ic/docker'
+                sh 'docker compose up -d --build'
+            }
+        }
+        stage('Finalisation du déploiement') {
+            steps {
+                sh './ic/docker/post-deploy.sh'
             }
         }
     }
